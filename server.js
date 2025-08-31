@@ -12,6 +12,14 @@ const authRoute = require('./routes/auth.route');
 // mounting
 app.use('/api', authRoute);
 
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error:", err);
+  res.status(500).json({
+    status: "error",
+    error: "Internal Server Error from error handling middleware",
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

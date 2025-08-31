@@ -5,12 +5,12 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
+// routes
+const authRoute = require('./routes/auth.route');
 
 
-const tasksRoute = require('./routes/tasks.route');
-app.use('/api', tasksRoute);
-
-
+// mounting
+app.use('/api', authRoute);
 
 
 app.listen(PORT, () => {

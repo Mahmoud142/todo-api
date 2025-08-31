@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon test.js"
+    "dev": "nodemon server.js"
   },
   "author": "Mahmoud",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.15.0",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0"
   },
   "devDependencies": {

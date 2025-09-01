@@ -3,10 +3,10 @@ const prisma = require('../config/db');
 const asyncHandler = require('express-async-handler');
 
 
-
+//@desc Create a new category
+//@route POST /api/categories
+//@access Private
 exports.createCategory = asyncHandler(async (req, res) => {
-    
-
     const category = await prisma.category.create({
         data: {
             title: req.body.title,
@@ -22,6 +22,9 @@ exports.createCategory = asyncHandler(async (req, res) => {
     });
 });
 
+//@desc Get all categories
+//@route GET /api/categories
+//@access Private
 exports.getAllCategories = asyncHandler(async (req, res,next) => {
     const categories = await prisma.category.findMany({
         where: {
@@ -37,6 +40,9 @@ exports.getAllCategories = asyncHandler(async (req, res,next) => {
     });
 });
 
+//@desc Get a single category
+//@route GET /api/categories/:id
+//@access Private
 exports.getSingleCategory = asyncHandler(async (req, res, next) => {
     const category = await prisma.category.findUnique({
         where: {
@@ -59,7 +65,9 @@ exports.getSingleCategory = asyncHandler(async (req, res, next) => {
     });
 });
 
-
+//@desc Update a category
+//@route PUT /api/categories/:id
+//@access Private
 exports.updateCategory = asyncHandler(async (req, res, next) => {
     const category = await prisma.category.findUnique({
         where: {
@@ -93,7 +101,9 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
 });
 
 
-
+//@desc Delete a category
+//@route DELETE /api/categories/:id
+//@access Private
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
     const category = await prisma.category.findUnique({

@@ -59,6 +59,41 @@ exports.getSingleCategory = asyncHandler(async (req, res, next) => {
     });
 });
 
+
+exports.updateCategory = asyncHandler(async (req, res, next) => {
+    const category = await prisma.category.findUnique({
+        where: {
+            id: parseInt(req.params.id),
+            userId: req.user.id,
+        },
+    });
+
+    if (!category) {
+        const error = new Error("Category not found");
+        error.statusCode = 404;
+        return next(error);
+    }
+
+    const updatedCategory = await prisma.category.update({
+        where: {
+            id: parseInt(req.params.id),
+            userId: req.user.id,
+        },
+        data: {
+            title: req.body.title,
+        },
+    });
+
+    res.status(200).json({
+        status: "success",
+        data: {
+            category: updatedCategory,
+        },
+    });
+});
+
+
+
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
     const category = await prisma.category.findUnique({

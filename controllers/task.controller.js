@@ -32,12 +32,16 @@ exports.getAllTasks = asyncHandler(async(req,res,next)=>{
 
 
 exports.updateTask = asyncHandler(async(req, res, next)=>{
+    const cur_status = req.body.status;
+    if(cur_status !== "completed"  && cur_status !== "in_progress"){
+        cur_status = "pending";
+    }
     const task = await prisma.task.update({
         where: { id: parseInt(req.params.id), userId: req.user.id },
         data: {
             title: req.body.title,
             description: req.body.description,
-            status: req.body.status
+            status: cur_status
         },
     });
 

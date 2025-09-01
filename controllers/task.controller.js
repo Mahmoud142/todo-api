@@ -18,3 +18,14 @@ exports.createTask = asyncHandler(async(req, res, next) => {
     data: task,
   });
 });
+
+exports.getAllTasks = asyncHandler(async(req,res,next)=>{
+    const tasks = await prisma.task.findMany({
+        where:{userId: req.user.id}
+    });
+    
+    res.status(200).json({
+        status: "success",
+        data: tasks
+    });
+})

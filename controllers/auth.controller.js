@@ -1,7 +1,7 @@
 const prisma = require("../config/db");
 const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
-
+const jwt = require('jsonwebtoken');
 
 
 exports.signUp = asyncHandler(async (req, res, next) => {
@@ -13,11 +13,15 @@ exports.signUp = asyncHandler(async (req, res, next) => {
       password: await bcrypt.hash(req.body.password, 10),
     },
   });
+
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+  
   delete user.password;
   res.status(201).json({
     status: "success",
     msg: "User created successfully",
     data: user,
+    token
   });
 });
 
@@ -38,9 +42,12 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   delete user.password;
 
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+
   res.status(200).json({
     status: "success",
     msg: "User logged in successfully",
     data: user,
+    token
   });
 });

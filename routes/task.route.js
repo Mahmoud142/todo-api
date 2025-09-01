@@ -2,20 +2,24 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  createTask,
   getAllTasks,
-  updateTask,
   getSingleTask,
+  createTask,
+  updateTask,
+  deleteTask,
 } = require("../controllers/task.controller");
 const protect = require("../middlewares/protect.middleware");
 
-router
-  .route("/tasks")
-  .post(protect.auth, createTask)
-  .get(protect.auth, getAllTasks);
+router.use(protect.auth); //to all routes
 
-router.route("/tasks/:id")
-  .put(protect.auth, updateTask)
-  .get(protect.auth, getSingleTask);
+router.route("/tasks")
+  .post(createTask)
+  .get(getAllTasks);
+
+router
+  .route("/tasks/:id")
+  .put(updateTask)
+  .get(getSingleTask)
+  .delete(deleteTask);
 
 module.exports = router;

@@ -62,3 +62,14 @@ exports.getSingleTask = asyncHandler(async(req, res, next)=>{
         data: task
     });
 })
+
+exports.deleteTask = asyncHandler(async (req, res, next)=>{
+    const task = await prisma.task.delete({
+        where:{id: parseInt(req.params.id), userId: req.user.id}
+    })
+
+    res.status(204).json({
+        status: "success",
+        data: null
+    })
+})

@@ -1,3 +1,4 @@
+const { parse } = require('dotenv');
 const prisma = require('../config/db');
 const asyncHandler = require('express-async-handler');
 
@@ -35,3 +36,54 @@ exports.getAllCategories = asyncHandler(async (req, res,next) => {
         },
     });
 });
+
+exports.getSingleCategory = asyncHandler(async (req, res, next) => {
+    const category = await prisma.category.findUnique({
+        where: {
+            id: parseInt(req.params.id),
+            userId: req.user.id,
+        },
+    });
+
+    if (!category) {
+        const error = new Error("Category not found");
+        error.statusCode = 404;
+        return next(error);
+    }
+
+    res.status(200).json({
+        status: "success",
+        data: {
+            category,
+        },
+    });
+});
+
+exports.deleteCategory = asyncHandler(async (req, res, next) => {
+
+    const category = await prisma.category.findUnique({
+        where: {
+            id: parseInt(req.params.id),
+            userId: req.user.id,
+        },
+    });
+
+    if (!category) {
+        const error = new Error("Category not found");
+        error.statusCode = 404;
+        return next(error);
+    }
+
+    await prisma.category.delete({
+        where: {
+            id: parseInt(req.params.id),
+            userId: req.user.id,
+        },
+    });
+
+    res.status(204).json({
+        status: "success",
+        data: null,
+    });
+});
+

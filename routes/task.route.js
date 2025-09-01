@@ -12,12 +12,12 @@ const protect = require("../middlewares/protect.middleware");
 
 router.use(protect.auth); //to all routes
 
-router.route("/tasks")
+router.route("/")
   .post(createTask)
   .get(getAllTasks);
 
 router
-  .route("/tasks/:id")
+  .route("/:id")
   .put(updateTask)
   .get(getSingleTask)
   .delete(deleteTask);

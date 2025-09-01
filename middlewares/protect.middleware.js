@@ -8,7 +8,7 @@ exports.auth = asyncHandler(async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer'))
         token = req.headers.authorization.split(' ')[1];
     if (!token) {
-        return next(AppError.create('You are not logged in', 401, FAIL));
+        return next(new Error('Not authorized, no token'));
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 

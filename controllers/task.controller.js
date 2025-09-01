@@ -23,9 +23,42 @@ exports.getAllTasks = asyncHandler(async(req,res,next)=>{
     const tasks = await prisma.task.findMany({
         where:{userId: req.user.id}
     });
-    
+
     res.status(200).json({
         status: "success",
         data: tasks
+    });
+})
+
+
+exports.updateTask = asyncHandler(async(req, res, next)=>{
+    const task = await prisma.task.update({
+        where: { id: parseInt(req.params.id), userId: req.user.id },
+        data: {
+            title: req.body.title,
+            description: req.body.description,
+        },
+    });
+
+    res.status(200).json({
+        status: "success",
+        data: task
+    });
+})
+
+exports.getSingleTask = asyncHandler(async(req, res, next)=>{
+    const task= await prisma.task.findUnique({
+        where:{id: parseInt(req.params.id), userId: req.user.id}
+    })
+
+    if(!task){
+        const error = new Error("Task not found");
+        error.statusCode = 404;
+        return next(error);
+    }
+
+    res.status(200).json({
+        status: "success",
+        data: task
     });
 })

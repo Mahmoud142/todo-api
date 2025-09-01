@@ -7,10 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 // routes
 const authRoute = require('./routes/auth.route');
-
+const taskRoute = require('./routes/task.route');
 
 // mounting
 app.use('/api', authRoute);
+app.use('/api', taskRoute);
 
 // error handling middleware
 app.use((err, req, res, next) => {

@@ -37,6 +37,7 @@ exports.updateTask = asyncHandler(async(req, res, next)=>{
         data: {
             title: req.body.title,
             description: req.body.description,
+            status: req.body.status
         },
     });
 

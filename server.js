@@ -5,6 +5,11 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
+const morgan = require('morgan');
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
 // routes
 const authRoute = require('./routes/auth.route');
 const taskRoute = require('./routes/task.route');

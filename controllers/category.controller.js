@@ -21,4 +21,17 @@ exports.createCategory = asyncHandler(async (req, res) => {
     });
 });
 
+exports.getAllCategories = asyncHandler(async (req, res,next) => {
+    const categories = await prisma.category.findMany({
+        where: {
+            userId: req.user.id,
+        },
+    });
 
+    res.status(200).json({
+        status: "success",
+        data: {
+            categories,
+        },
+    });
+});

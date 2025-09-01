@@ -17,10 +17,12 @@ app.use('/api/categories', categoryRoute);
 
 // error handling middleware
 app.use((err, req, res, next) => {
-  console.error("Error:", err);
+  // console.error("Error:", err);
+  // console.log(err);
   res.status(500).json({
     status: "error",
-    message: err.message,
+    message: err.message || "Internal Server Error",
+    statusCode: err.statusCode || 500,
     error: "Internal Server Error from error handling middleware",
   });
 });

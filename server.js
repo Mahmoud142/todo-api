@@ -8,10 +8,12 @@ const PORT = process.env.PORT || 3000;
 // routes
 const authRoute = require('./routes/auth.route');
 const taskRoute = require('./routes/task.route');
+const categoryRoute = require('./routes/category.route');
 
 // mounting
-app.use('/api', authRoute);
-app.use('/api', taskRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/tasks', taskRoute);
+app.use('/api/categories', categoryRoute);
 
 // error handling middleware
 app.use((err, req, res, next) => {

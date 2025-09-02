@@ -50,13 +50,11 @@ exports.getSingleCategory = asyncHandler(async (req, res, next) => {
             userId: req.user.id,
         },
     });
-
-    if (!category) {
+    if(!category){
         const error = new Error("Category not found");
         error.statusCode = 404;
         return next(error);
     }
-
     res.status(200).json({
         status: "success",
         data: {
@@ -106,20 +104,14 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
 //@access Private
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
-    const category = await prisma.category.findUnique({
-        where: {
-            id: parseInt(req.params.id),
-            userId: req.user.id,
-        },
-    });
 
-    if (!category) {
+    const category = await prisma.category.findFirst({where : {id: parseInt(req.params.id), userId: req.user.id}});
+    if(!category){
         const error = new Error("Category not found");
         error.statusCode = 404;
         return next(error);
     }
-
-    await prisma.category.delete({
+    const deletedCategory = await prisma.category.delete({
         where: {
             id: parseInt(req.params.id),
             userId: req.user.id,

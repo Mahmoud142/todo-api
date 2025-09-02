@@ -8,17 +8,27 @@ const {
   deleteCategory,
   updateCategory
 } = require("../controllers/category.controller");
+
+const {
+  createCategoryValidator,
+  getSingleCategoryValidator,
+  updateCategoryValidator,
+  deleteCategoryValidator
+} = require("../utils/validators/category.validator");
+
 const protect = require("../middlewares/protect.middleware");
+
+router.use(protect.auth);
 
 router
   .route("/")
-  .post(protect.auth, createCategory)
-  .get(protect.auth, getAllCategories);
+  .post(createCategoryValidator, createCategory)
+  .get(getAllCategories);
 
 router
   .route("/:id")
-  .get(protect.auth, getSingleCategory)
-  .delete(protect.auth, deleteCategory)
-  .put(protect.auth, updateCategory)
+  .get(getSingleCategoryValidator, getSingleCategory)
+  .delete(deleteCategoryValidator, deleteCategory)
+  .put(updateCategoryValidator, updateCategory)
 
 module.exports = router;

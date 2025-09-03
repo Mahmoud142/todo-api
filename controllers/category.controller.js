@@ -108,3 +108,16 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
     data: null,
   });
 });
+
+exports.getAllTasksForCategory = asyncHandler(async (req, res, next) => {
+  const tasks = await prisma.task.findMany({
+    where: {
+      categoryId: parseInt(req.params.id),
+    },
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: tasks,
+  });
+});

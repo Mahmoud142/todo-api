@@ -8,33 +8,19 @@ exports.createCategoryValidator = [
   check("title")
     .notEmpty()
     .withMessage("Title is required")
-    .isLength({ min: 3, max: 30 })
-    .withMessage("Title must be between 3 and 30 characters long")
-    .custom(async (value, { req }) => {
-      const category = await prisma.category.findFirst({
-        where: { 
-          title: value, 
-          userId: req.user.id // Only check for dup licates within the same user
-        },
-      });
-      if (category) {
-        return Promise.reject("Category already exists");
-      }
-      return true;
-    }),
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Title must be between 3 and 100 characters long"),
   validatorMiddleware,
 ];
 
 exports.getSingleCategoryValidator = [
-    check("id")
-        .isNumeric()
-        .withMessage("Invalid category id"),
-    validatorMiddleware,
+  check("id").isNumeric().withMessage("Invalid category id"),
+  validatorMiddleware,
 ];
 
 exports.updateCategoryValidator = [
   check("id")
-    .isInt()
+    .isNumeric()
     .withMessage("Invalid category id")
     .custom(async (value) => {
       const category = await prisma.category.findUnique({
@@ -45,29 +31,15 @@ exports.updateCategoryValidator = [
       }
       return true;
     }),
-    check("title")
+  check("title")
     .notEmpty()
     .withMessage("Title is required")
-    .isLength({ min: 3, max: 30 })
-    .withMessage("Title must be between 3 and 30 characters long")
-    .custom(async (value, { req }) => {
-      const category = await prisma.category.findFirst({
-        where: { 
-          title: value, 
-          userId: req.user.id // Only check for dup licates within the same user
-        },
-      });
-      if (category) {
-        return Promise.reject("Category already exists");
-      }
-      return true;
-    }),
-    validatorMiddleware,
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Title must be between 3 and 100 characters long"),
+  validatorMiddleware,
 ];
 
 exports.deleteCategoryValidator = [
-   check("id")
-    .isNumeric()
-    .withMessage("Invalid category ID"),
-    validatorMiddleware,
+  check("id").isNumeric().withMessage("Invalid category ID"),
+  validatorMiddleware,
 ];

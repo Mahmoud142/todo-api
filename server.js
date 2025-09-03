@@ -36,7 +36,6 @@ app.use((err, req, res, next) => {
     status: "error",
     message: err.message || "Internal Server Error",
     statusCode: err.statusCode || 500,
-    error: "Internal Server Error from error handling middleware",
   });
 });
 

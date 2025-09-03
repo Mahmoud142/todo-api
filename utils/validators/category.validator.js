@@ -43,3 +43,8 @@ exports.deleteCategoryValidator = [
   check("id").isNumeric().withMessage("Invalid category ID"),
   validatorMiddleware,
 ];
+
+exports.getTasksByCategoryValidator = [
+  check("id").isNumeric().withMessage("Invalid category ID"),
+  validatorMiddleware,
+];

@@ -7,13 +7,14 @@ const {
   createTask,
   updateTask,
   deleteTask,
+
 } = require("../controllers/task.controller");
 
 const {
   createTaskValidator,
   updateTaskValidator,
   getSingleTaskValidator,
-  deleteTaskValidator
+  deleteTaskValidator,
 } = require("../utils/validators/task.validator");
 
 const protect = require("../middlewares/protect.middleware");
@@ -24,10 +25,12 @@ router.route("/")
   .post(createTaskValidator, createTask)
   .get(getAllTasks);
 
-router
-  .route("/:id")
-  .put(updateTaskValidator, updateTask)
-  .get(getSingleTaskValidator, getSingleTask)
-  .delete(deleteTaskValidator, deleteTask);
+  router
+    .route("/:id")
+    .put(updateTaskValidator, updateTask)
+    .get(getSingleTaskValidator, getSingleTask)
+    .delete(deleteTaskValidator, deleteTask);
+
+  
 
 module.exports = router;

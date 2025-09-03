@@ -1,16 +1,17 @@
-const prisma = require('../config/db');
+const prisma = require("../config/db");
 
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require("express-async-handler");
 
 //@desc Create a new task
 //@route POST /api/tasks
 //@access Private
-exports.createTask = asyncHandler(async(req, res, next) => {
+exports.createTask = asyncHandler(async (req, res, next) => {
   const task = await prisma.task.create({
     data: {
       title: req.body.title,
       description: req.body.description,
       userId: req.user.id,
+      categoryId: req.body.categoryId,
     },
   });
 
@@ -24,68 +25,70 @@ exports.createTask = asyncHandler(async(req, res, next) => {
 //@desc Get all tasks
 //@route GET /api/tasks
 //@access Private
-exports.getAllTasks = asyncHandler(async(req,res,next)=>{
-    const tasks = await prisma.task.findMany({
-        where:{userId: req.user.id}
-    });
+exports.getAllTasks = asyncHandler(async (req, res, next) => {
+  const tasks = await prisma.task.findMany({
+    where: { userId: req.user.id },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
-    res.status(200).json({
-        status: "success",
-        data: tasks
-    });
-})
-
+  res.status(200).json({
+    status: "success",
+    data: tasks,
+  });
+});
 
 //@desc Update a task
 //@route PUT /api/tasks/:id
 //@access Private
-exports.updateTask = asyncHandler(async(req, res, next)=>{
-    
-    const task = await prisma.task.update({
-        where: { id: parseInt(req.params.id), userId: req.user.id },
-        data: {
-            title: req.body.title,
-            description: req.body.description,
-            status: req.body.status
-        },
-    });
+exports.updateTask = asyncHandler(async (req, res, next) => {
+  const task = await prisma.task.update({
+    where: { id: parseInt(req.params.id), userId: req.user.id },
+    data: {
+      title: req.body.title,
+      description: req.body.description,
+      status: req.body.status,
+    },
+  });
 
-    res.status(200).json({
-        status: "success",
-        data: task
-    });
-})
+  res.status(200).json({
+    status: "success",
+    data: task,
+  });
+});
 
 //@desc Get a single task
 //@route GET /api/tasks/:id
 //@access Private
-exports.getSingleTask = asyncHandler(async(req, res, next)=>{
-    const task= await prisma.task.findUnique({
-        where:{id: parseInt(req.params.id), userId: req.user.id}
-    })
+exports.getSingleTask = asyncHandler(async (req, res, next) => {
+  const task = await prisma.task.findUnique({
+    where: { id: parseInt(req.params.id), userId: req.user.id },
+  });
 
-    if(!task){
-        const error = new Error("Task not found");
-        error.statusCode = 404;
-        return next(error);
-    }
+  if (!task) {
+    const error = new Error("Task not found");
+    error.statusCode = 404;
+    return next(error);
+  }
 
-    res.status(200).json({
-        status: "success",
-        data: task
-    });
-})
+  res.status(200).json({
+    status: "success",
+    data: task,
+  });
+});
 
 //@desc Delete a task
 //@route DELETE /api/tasks/:id
 //@access Private
-exports.deleteTask = asyncHandler(async (req, res, next)=>{
-    const task = await prisma.task.delete({
-        where:{id: parseInt(req.params.id), userId: req.user.id}
-    })
+exports.deleteTask = asyncHandler(async (req, res, next) => {
+  const task = await prisma.task.delete({
+    where: { id: parseInt(req.params.id), userId: req.user.id },
+  });
 
-    res.status(204).json({
-        status: "success",
-        data: null
-    })
-})
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+

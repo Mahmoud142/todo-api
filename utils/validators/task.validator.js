@@ -2,7 +2,11 @@ const { check } = require("express-validator");
 const {
   validatorMiddleware,
 } = require("../../middlewares/validator.middlewares");
+
 const prisma = require("../../config/db");
+
+
+
 
 exports.createTaskValidator = [
   check("title")
@@ -10,6 +14,19 @@ exports.createTaskValidator = [
     .withMessage("Title is required")
     .isLength({ min: 3 })
     .withMessage("Title must be at least 3 characters long"),
+  check("categoryId")
+    .optional()
+    .isNumeric()
+    .withMessage("Category ID must be a number")
+    .custom(async (categoryId, { req }) => {
+      const category = await prisma.category.findUnique({
+        where: { id: parseInt(req.body.categoryId), userId: req.user.id },
+      });
+      if (!category) {
+        return Promise.reject(new Error("Category not found"));
+      }
+      return true;
+    }),
   validatorMiddleware,
 ];
 
@@ -34,6 +51,19 @@ exports.updateTaskValidator = [
     .optional()
     .isLength({ min: 3 })
     .withMessage("Title must be at least 3 characters long"),
+  check("categoryId")
+    .optional()
+    .isNumeric()
+    .withMessage("Category ID must be a number")
+    .custom(async (categoryId, { req }) => {
+      const category = await prisma.category.findUnique({
+        where: { id: parseInt(categoryId), userId: req.user.id },
+      });
+      if (!category) {
+        return Promise.reject(new Error("Category not found"));
+      }
+      return true;
+    }),
   validatorMiddleware,
 ];
 
@@ -57,3 +87,4 @@ exports.deleteTaskValidator = [
     }),
   validatorMiddleware,
 ];
+

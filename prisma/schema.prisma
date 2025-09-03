@@ -9,37 +9,38 @@ datasource db {
 }
 
 // after update - > npx prisma migrate dev --name <migration-name>
-// - > npx prisma generate
+
 model User {
   id         Int        @id @default(autoincrement())
-  username   String     @unique @db.VarChar(20)
-  email      String     @unique @db.VarChar(100)
   name       String     @db.VarChar(100)
+  email      String     @unique @db.VarChar(100)
+  password   String     @db.VarChar(100)
   tasks      Task[] //one to many
   categories Category[] //one to many
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  password   String     @db.VarChar(100)
 }
 
 model Task {
   id          Int        @id @default(autoincrement())
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title       String     @db.VarChar(100)
+  title       String     @db.VarChar(200)
   description String?    @db.Text
   status      String     @default("pending")
+  userId      Int
+  categoryId  Int?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   dueDate     DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  categories  Category[] // implicit many-to-many
+
 }
 
 model Category {
   id     Int    @id @default(autoincrement())
   title  String @db.VarChar(100)
-  user   User?  @relation(fields: [userId], references: [id])
   userId Int?
-  task   Task?  @relation(fields: [taskId], references: [id])
-  taskId Int?
+  user   User?  @relation(fields: [userId], references: [id])
+  tasks   Task[] // many-to-many relation with Task
+  createdAt DateTime @default(now())
 }
